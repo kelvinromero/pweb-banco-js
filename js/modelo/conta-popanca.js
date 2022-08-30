@@ -3,6 +3,4 @@ class ContaPopanca extends Conta {
         super(numero, saldo);
         this.dataAniversario = dataAniversario;
     }
-
-
 }
