@@ -17,16 +17,39 @@ class ContaController {
         evento.preventDefault();
         const elementoNumero = document.querySelector('#numero');
         const elementoSaldo = document.querySelector('#saldo');
+        const elementoTipoConta = document.querySelector('#tipo_conta')
 
-        const conta = new Conta(elementoNumero.value,
-            Number(elementoSaldo.value));
+        let conta;
+        const numero = elementoNumero.value
+        const saldo = Number(elementoSaldo.value)
+
+        switch (elementoTipoConta.value) {
+            case 'conta':
+                conta = new Conta(numero, saldo)
+                break
+            case 'conta_bonificada':
+                conta = new ContaBonificada(numero, saldo)
+                break
+            case 'conta_poupanca':
+                const elementoDataAniversario = document.querySelector('#data_aniversario');
+                const dataAniversario = new Date(elementoDataAniversario.value)
+                conta = new ContaPopanca(numero, saldo, dataAniversario)
+                break
+        }
+
         this.repositorioContas.adicionar(conta);
         this.inserirContaNoHTML(conta);
     }
 
     inserirContaNoHTML(conta) {
         const elementoP = document.createElement('p');
-        elementoP.textContent = 'Conta ' + conta.numero + ': ' + conta.saldo;
+
+        let dataAniversario = ''
+        if (conta.dataAniversario) {
+            dataAniversario = ' - Aniversário: ' + conta.dataAniversario.toLocaleDateString('pt-BR');
+        }
+
+        elementoP.textContent = 'Conta ' + conta.numero + ': ' + conta.saldo + dataAniversario;
         const botaoApagar = document.createElement('button');
         botaoApagar.textContent = 'X';
 
